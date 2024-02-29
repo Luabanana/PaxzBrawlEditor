@@ -11,8 +11,9 @@
     <div id="editSection" style="display: none;">
         <label for="characterSelect">Select Character:</label>
         <select id="characterSelect">
-            <option value="ShotgunGirl">Shelly</option>
-            <option value="Gunslinger">Colt</option>
+            <option value="ShotgunGirlWeapon">ShotgunGirlWeapon</option>
+            <option value="ShotgunGirlUlti">ShotgunGirlUlti</option>
+            <option value="GunslingerWeapon">GunslingerWeapon</option>
             <!-- Add other options here -->
         </select>
         <br><br>
@@ -40,7 +41,8 @@
                     var newData = lines.map(line => {
                         var cells = line.split(',');
                         if (cells[0] === selectedCharacter) {
-                            cells[9] = newCastingRange; // Assuming CastingRange is at index 9
+                            // Assuming CastingRange is at index 9
+                            cells[9] = newCastingRange;
                         }
                         return cells.join(',');
                     });
