@@ -11,14 +11,13 @@
     <div id="editSection" style="display: none;">
         <label for="characterSelect">Select Character:</label>
         <select id="characterSelect">
-            <option value="Shelly">ShotgunGirl</option>
-            <option value="Colt">Gunslinger</option>
-            <option value="Bull">BullDude</option>
+            <option value="ShotgunGirl">Shelly</option>
+            <option value="Gunslinger">Colt</option>
             <!-- Add other options here -->
         </select>
         <br><br>
-        <label for="rageOfAttack">Rage of attack:</label>
-        <input type="text" id="rageOfAttack"><br><br>
+        <label for="castingRange">New Casting Range:</label>
+        <input type="text" id="castingRange"><br><br>
         <button onclick="saveChanges()">Save</button>
     </div>
 
@@ -29,7 +28,7 @@
 
         function saveChanges() {
             var selectedCharacter = document.getElementById("characterSelect").value;
-            var rageOfAttack = document.getElementById("rageOfAttack").value;
+            var newCastingRange = document.getElementById("castingRange").value;
 
             // Fetch the original CSV file
             fetch('skills.csv')
@@ -37,11 +36,11 @@
                 .then(data => {
                     // Split CSV by lines
                     var lines = data.split('\n');
-                    // Replace CastingRange for the selected character
+                    // Loop through lines to find and replace CastingRange for the selected character
                     var newData = lines.map(line => {
                         var cells = line.split(',');
                         if (cells[0] === selectedCharacter) {
-                            cells[1] = rageOfAttack;
+                            cells[9] = newCastingRange; // Assuming CastingRange is at index 9
                         }
                         return cells.join(',');
                     });
