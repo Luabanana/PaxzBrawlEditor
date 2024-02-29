@@ -1,32 +1,64 @@
-function saveChanges() {
-    var selectedCharacter = document.getElementById("characterSelect").value;
-    var newCastingRange = document.getElementById("castingRange").value;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit .csv file</title>
+</head>
+<body>
+    <h1>Edit .csv File</h1>
+    <button onclick="startEditing()">Start</button>
+    <div id="editSection" style="display: none;">
+        <label for="characterSelect">Select Character:</label>
+        <select id="characterSelect">
+            <option value="ShotgunGirlWeapon">ShotgunGirlWeapon</option>
+            <option value="ShotgunGirlUlti">ShotgunGirlUlti</option>
+            <option value="GunslingerWeapon">GunslingerWeapon</option>
+            <!-- Add other options here -->
+        </select>
+        <br><br>
+        <label for="castingRange">New Casting Range:</label>
+        <input type="text" id="castingRange"><br><br>
+        <button onclick="saveChanges()">Save</button>
+    </div>
 
-    // Fetch the original CSV file
-    fetch('skills.csv')
-        .then(response => response.text())
-        .then(data => {
-            // Split CSV by lines
-            var lines = data.split('\n');
-            // Loop through lines to find and replace CastingRange for the selected character
-            var newData = lines.map(line => {
-                var cells = line.split(',');
-                if (cells[0] === selectedCharacter) {
-                    // Assuming CastingRange is at index 9
-                    cells[9] = newCastingRange;
-                }
-                return cells.join(',');
-            });
-            // Join lines back into CSV format
-            var updatedCSV = newData.join('\n');
+    <script>
+        function startEditing() {
+            document.getElementById("editSection").style.display = "block";
+        }
 
-            // Download the updated CSV file
-            var encodedUri = encodeURI("data:text/csv;charset=utf-8," + updatedCSV);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "edited_skills.csv");
-            document.body.appendChild(link);
+        function saveChanges() {
+            var selectedCharacter = document.getElementById("characterSelect").value;
+            var newCastingRange = document.getElementById("castingRange").value;
 
-            link.click();
-        });
-}
+            // Fetch the original CSV file
+            fetch('skills.csv')
+                .then(response => response.text())
+                .then(data => {
+                    // Split CSV by lines
+                    var lines = data.split('\n');
+                    // Loop through lines to find and replace CastingRange for the selected character
+                    var newData = lines.map(line => {
+                        var cells = line.split(',');
+                        if (cells[0] === selectedCharacter) {
+                            // Assuming CastingRange is at index 9
+                            cells[9] = newCastingRange;
+                        }
+                        return cells.join(',');
+                    });
+                    // Join lines back into CSV format
+                    var updatedCSV = newData.join('\n');
+
+                    // Download the updated CSV file
+                    var encodedUri = encodeURI("data:text/csv;charset=utf-8," + updatedCSV);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "edited_skills.csv");
+                    document.body.appendChild(link);
+
+                    link.click();
+                });
+        }
+    </script>
+</body>
+</html>
