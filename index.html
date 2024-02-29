@@ -37,17 +37,23 @@
                 .then(data => {
                     // Split CSV by lines
                     var lines = data.split('\n');
-                    // Loop through lines to find and replace CastingRange for the selected character
-                    var newData = lines.map(line => {
-                        var cells = line.split(',');
-                        if (cells[0] === selectedCharacter) {
-                            // Assuming CastingRange is at index 9
-                            cells[9] = newCastingRange;
+                    // Find the index of the header row
+                    var headerIndex = lines.findIndex(line => line.startsWith("Name"));
+                    // Find the index of the selected character
+                    var characterIndex = lines.findIndex(line => line.startsWith(selectedCharacter));
+                    // Update the CastingRange for the selected character
+                    if (headerIndex !== -1 && characterIndex !== -1) {
+                        // Assuming CastingRange is the 10th column (index 9)
+                        var columns = lines[headerIndex].split(',');
+                        var castingRangeIndex = columns.findIndex(column => column.trim() === "CastingRange");
+                        if (castingRangeIndex !== -1) {
+                            var characterData = lines[characterIndex].split(',');
+                            characterData[castingRangeIndex] = newCastingRange;
+                            lines[characterIndex] = characterData.join(',');
                         }
-                        return cells.join(',');
-                    });
+                    }
                     // Join lines back into CSV format
-                    var updatedCSV = newData.join('\n');
+                    var updatedCSV = lines.join('\n');
 
                     // Download the updated CSV file
                     var encodedUri = encodeURI("data:text/csv;charset=utf-8," + updatedCSV);
