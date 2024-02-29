@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit .csv file</title>
+</head>
+<body>
+    <h1>Edit .csv File</h1>
+    <button onclick="startEditing()">Start</button>
+    <div id="editSection" style="display: none;">
+        <label for="characterSelect">Select Character:</label>
+        <select id="characterSelect">
+            <option value="Shelly">ShotgunGirl</option>
+            <option value="Colt">Gunslinger</option>
+            <option value="Bull">BullDude</option>
+            <!-- Add other options here -->
+        </select>
+        <br><br>
+        <label for="rageOfAttack">Rage of attack:</label>
+        <input type="text" id="rageOfAttack"><br><br>
+        <button onclick="saveChanges()">Save</button>
+    </div>
+
+    <script>
+        function startEditing() {
+            document.getElementById("editSection").style.display = "block";
+        }
+
+        function saveChanges() {
+            var selectedCharacter = document.getElementById("characterSelect").value;
+            var rageOfAttack = document.getElementById("rageOfAttack").value;
+            var csvContent = "CastingRange,Rage of attack\n" + selectedCharacter + "," + rageOfAttack + "\n";
+
+            var encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "edited_data.csv");
+            document.body.appendChild(link);
+
+            link.click();
+        }
+    </script>
+</body>
+</html>
