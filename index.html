@@ -31,35 +31,33 @@
             var selectedCharacter = document.getElementById("characterSelect").value;
             var rageOfAttack = document.getElementById("rageOfAttack").value;
 
-            // Read existing CSV file content
-            fetch("data.csv")
+            // Fetch the original CSV file
+            fetch('skills.csv')
                 .then(response => response.text())
                 .then(data => {
-                    // Split the CSV into rows
-                    var rows = data.split('\n');
-                    // Iterate through rows to find and update the selected character's data
-                    for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header
-                        var columns = rows[i].split(',');
-                        if (columns[0] === selectedCharacter) {
-                            // Update the Rage of attack value
-                            columns[1] = rageOfAttack;
-                            // Reconstruct the row with updated data
-                            rows[i] = columns.join(',');
-                            break; // Stop looping after finding the selected character
+                    // Split CSV by lines
+                    var lines = data.split('\n');
+                    // Replace CastingRange for the selected character
+                    var newData = lines.map(line => {
+                        var cells = line.split(',');
+                        if (cells[0] === selectedCharacter) {
+                            cells[1] = rageOfAttack;
                         }
-                    }
-                    // Join rows back into a single CSV string
-                    var updatedCsvContent = rows.join('\n');
+                        return cells.join(',');
+                    });
+                    // Join lines back into CSV format
+                    var updatedCSV = newData.join('\n');
+
                     // Download the updated CSV file
-                    var encodedUri = encodeURI("data:text/csv;charset=utf-8," + updatedCsvContent);
+                    var encodedUri = encodeURI("data:text/csv;charset=utf-8," + updatedCSV);
                     var link = document.createElement("a");
                     link.setAttribute("href", encodedUri);
-                    link.setAttribute("download", "edited_data.csv");
+                    link.setAttribute("download", "edited_skills.csv");
                     document.body.appendChild(link);
+
                     link.click();
                 });
         }
     </script>
 </body>
 </html>
-
